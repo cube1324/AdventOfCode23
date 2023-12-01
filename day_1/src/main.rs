@@ -9,31 +9,30 @@ fn main() {
 
     let mut sum = 0;
 
-    for mut line in read_to_string("src/test.txt").unwrap().lines() {
-        // let mut temp = str::replace(line, "one", "1");
-        // temp = str::replace(&temp, "two", "2");
-        // temp = str::replace(&temp, "three", "3");
-        // temp = str::replace(&temp, "four", "4");
-        // temp = str::replace(&temp, "five", "5");
-        // temp = str::replace(&temp, "six", "6");
-        // temp = str::replace(&temp, "seven", "7");
-        // temp = str::replace(&temp, "eight", "8");
-        // temp = str::replace(&temp, "nine", "9");
+    let words = vec!["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    let words_reversed = vec!["eno", "owt", "eerht", "ruof", "evif", "xis", "neves", "thgie", "enin"];
 
-        s = get_first(&line.chars().collect());
-        e = get_first(&line.chars().rev().collect());
+    for line in read_to_string("src/input.txt").unwrap().lines() {
 
-        println!("{} {} {}", line, s, e);
-        
+        e = get_last(&mut line.to_string(), &words);
+        s = get_last(&mut line.chars().rev().collect(), &words_reversed);
+
         sum += format!("{}{}", s, e).parse::<i32>().unwrap();
     }
     println!("{}", sum);
 }
 
-fn get_first(charset: &Vec<char>) -> char {
-    for el in charset {
+fn get_last(line: &mut String, words: &Vec<&str>) -> char {
+    while line.len() > 0{
+        for (i, number) in words.iter().enumerate() {
+            if line.ends_with(*number) {
+                return char::from_digit((i + 1) as u32, 10).unwrap();
+            }
+        }
+        let el = line.pop().unwrap();
+
         if el.is_digit(10){
-            return *el;
+            return el;
         }
     }
     return '0';
